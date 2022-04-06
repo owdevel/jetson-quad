@@ -1,5 +1,0 @@
-testing
-/home/jetson/catkin_ws/devel/.private/testing/cmake.lock /home/jetson/catkin_ws/devel/./cmake.lock
-/home/jetson/catkin_ws/devel/.private/testing/share/testing/cmake/testingConfig-version.cmake /home/jetson/catkin_ws/devel/share/testing/cmake/testingConfig-version.cmake
-/home/jetson/catkin_ws/devel/.private/testing/share/testing/cmake/testingConfig.cmake /home/jetson/catkin_ws/devel/share/testing/cmake/testingConfig.cmake
-/home/jetson/catkin_ws/devel/.private/testing/lib/pkgconfig/testing.pc /home/jetson/catkin_ws/devel/lib/pkgconfig/testing.pc

@@ -1,8 +1,0 @@
-mavros/mavros_extras
-/home/jetson/catkin_ws/devel/.private/mavros_extras/cmake.lock /home/jetson/catkin_ws/devel/./cmake.lock
-/home/jetson/catkin_ws/devel/.private/mavros_extras/share/mavros_extras/cmake/mavros_extrasConfig.cmake /home/jetson/catkin_ws/devel/share/mavros_extras/cmake/mavros_extrasConfig.cmake
-/home/jetson/catkin_ws/devel/.private/mavros_extras/share/mavros_extras/cmake/mavros_extrasConfig-version.cmake /home/jetson/catkin_ws/devel/share/mavros_extras/cmake/mavros_extrasConfig-version.cmake
-/home/jetson/catkin_ws/devel/.private/mavros_extras/lib/libmavros_extras.so /home/jetson/catkin_ws/devel/lib/libmavros_extras.so
-/home/jetson/catkin_ws/devel/.private/mavros_extras/lib/mavros_extras/visualization /home/jetson/catkin_ws/devel/lib/mavros_extras/visualization
-/home/jetson/catkin_ws/devel/.private/mavros_extras/lib/mavros_extras/servo_state_publisher /home/jetson/catkin_ws/devel/lib/mavros_extras/servo_state_publisher
-/home/jetson/catkin_ws/devel/.private/mavros_extras/lib/pkgconfig/mavros_extras.pc /home/jetson/catkin_ws/devel/lib/pkgconfig/mavros_extras.pc
