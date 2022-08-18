@@ -1,25 +1,24 @@
 {
-  "configurations": [
-    {
-      "browse": {
-        "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db",
-        "limitSymbolsToIncludedHeaders": false
-      },
-      "includePath": [
-        "/home/jetson/catkin_ws/devel/include/**",
-        "/opt/ros/melodic/include/**",
-        "/home/jetson/catkin_ws/src/mavros/libmavconn/include/**",
-        "/home/jetson/catkin_ws/src/mavros/mavros/include/**",
-        "/home/jetson/catkin_ws/src/mavros/mavros_msgs/include/**",
-        "/home/jetson/catkin_ws/src/mavros/test_mavros/include/**",
-        "/usr/include/**"
-      ],
-      "name": "ROS",
-      "intelliSenseMode": "gcc-arm64",
-      "compilerPath": "/usr/bin/gcc",
-      "cStandard": "gnu11",
-      "cppStandard": "c++14"
-    }
-  ],
-  "version": 4
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db",
+                "limitSymbolsToIncludedHeaders": false
+            },
+            "includePath": [
+                "/opt/ros/melodic/include/**",
+                "/usr/include/**",
+                "${workspaceFolder}/devel/include",
+                "${workspaceFolder}/src/ORB_SLAM3/build/CMakeFiles/mono_inertial_euroc.dir",
+                "${workspaceFolder}/src/ORB_SLAM3",
+                "${workspaceFolder}/src/ORB_SLAM3/include"
+            ],
+            "name": "ROS",
+            "intelliSenseMode": "gcc-arm64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu11",
+            "cppStandard": "c++14"
+        }
+    ],
+    "version": 4
 }

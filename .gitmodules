@@ -5,5 +5,5 @@
 	path = src/mavros
 	url = https://github.com/mavlink/mavros.git
 [submodule "src/ORB_SLAM3"]
-	path = src/ORB_SLAM3
+	path = src/orbslam3-ros/ORB_SLAM3
 	url = https://github.com/owdevel/jetson-orbslam.git

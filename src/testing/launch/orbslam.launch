@@ -1,8 +1,0 @@
-
-<launch>
-	<include file="$(find realsense2_camera)/launch/rs_camera.launch">
-	</include>
-
-    <!-- <node pkg="ORB_SLAM3" type="Mono" name="slam_node" output="screen" args="/home/jetson/jetson-quad/src/ORB_SLAM3/Vocabulary/ORBvoc.txt /home/jetson/jetson-quad/src/ORB_SLAM3/Examples/Monocular/RealSense_D435i.yaml" /> -->
-
-</launch>
