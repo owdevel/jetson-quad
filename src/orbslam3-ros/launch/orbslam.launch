@@ -2,18 +2,6 @@
 <launch>
 	<include file="$(find realsense2_camera)/launch/rs_camera.launch"/>
 
-    <node pkg="orbslam3-ros" type="orbslam3-ros_node" name="orbslam3_node" output="screen" args="$(find orbslam3-ros)/ORB_SLAM3/Vocabulary/ORBvoc.txt $(find orbslam3-ros)/config/RealSense_D435i.yaml" />
-
-
-		<!--https://gist.github.com/bhaskara/2400165-->
-
-  <!-- <node pkg="nodelet" type="nodelet" args="manager"
-        name="record_player_manager" output="screen"/> -->
-
-	 <node pkg="nodelet" type="nodelet" name="cloudify"
-        args="load depth_image_proc/point_cloud_xyz cloudify --no-bond">
-    <remap from="depth_registered/image_rect" to="camera/depth/image"/>
-    <remap from="depth_registered/points" to="camera/depth_registered/points"/>
-  </node>
+  <node pkg="orbslam3-ros" type="orbslam3-ros_node" name="orbslam3_node" output="screen" args="$(find orbslam3-ros)/ORB_SLAM3/Vocabulary/ORBvoc.txt $(find orbslam3-ros)/config/RealSense_D435i.yaml" />
 
 </launch>
