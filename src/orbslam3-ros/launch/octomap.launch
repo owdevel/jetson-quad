@@ -1,0 +1,28 @@
+<launch>
+
+    <!-- Set Debugging -->
+    <env name="ROSCONSOLE_CONFIG_FILE" value="$(find orbslam3-ros)/config/custom_rosconsole.conf"/>>
+
+    <!-- Convert to Pointcloud using nodelet and image pipeline -->
+    <node pkg="nodelet" type="nodelet" args="manager" name="standalone_nodelet" output="screen"/>
+    <node pkg="nodelet" type="nodelet" name="depth_image_proc" args="load depth_image_proc/point_cloud_xyz standalone_nodelet --no-bond">
+        <!-- Input: Camera calibration and metadata.  (sensor_msgs/CameraInfo) -->
+        <remap from="/camera_info" to="/camera/depth/camera_info"/>
+
+        <!-- Input: Rectified depth image, registered to the RGB camera. (sensor_msgs/Image) -->
+        <remap from="/image_rect" to="/orbslam_depth"/>
+
+        <!-- Output: XYZ point cloud. If using PCL, subscribe as PointCloud<PointXYZ>.  (sensor_msgs/PointCloud2)  -->
+        <remap from="/points" to="/orbslam_points"/>
+    </node>
+
+    <!-- Run octomap server to generate terrain map -->
+    <node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
+        <param name="resolution" value="0.05"/>
+
+        <param name="frame_id" type="string" value="camera_depth_optical_frame" />
+        <param name="sensor_model/max_range" value="5.0"/>
+
+        <remap from="cloud_in" to="/orbslam_points"/>
+    </node>
+</launch>

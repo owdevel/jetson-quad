@@ -34,6 +34,7 @@
 
 #include <geometry_msgs/PoseStamped.h>
 #include <Eigen/Geometry>
+#include <tf/transform_broadcaster.h>
 
 using namespace std;
 
@@ -130,10 +131,32 @@ void ImageGrabber::GrabRGBD(const sensor_msgs::ImageConstPtr& msgRGB,const senso
     poseStamp.pose.orientation.z = quaternion.z();
 
     poseStamp.header.stamp = msgD->header.stamp;
+    poseStamp.header.frame_id = msgD->header.frame_id;
+
+    static tf::TransformBroadcaster br;
+    tf::Transform transform;
+    transform.setOrigin(tf::Vector3(poseStamp.pose.position.x, poseStamp.pose.position.y, poseStamp.pose.position.z));
+    tf::Quaternion q;
+    q.setW(poseStamp.pose.orientation.w);
+    q.setX(poseStamp.pose.orientation.x);
+    q.setY(poseStamp.pose.orientation.y);
+    q.setZ(poseStamp.pose.orientation.z);
+    transform.setRotation(q);
+
+    tf::StampedTransform stf;
+    stf.setData(transform);
+    stf.stamp_ = msgD->header.stamp;
+    stf.frame_id_ = "map";
+    //stf.child_frame_id_ = "camera_link";
+    stf.child_frame_id_ = msgD->header.frame_id;
+
+    br.sendTransform(stf);
 
     pub.publish(poseStamp);
 
     depth.publish(msgD);
+
+
 
 
 }
