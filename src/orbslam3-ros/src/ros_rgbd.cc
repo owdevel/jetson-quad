@@ -63,7 +63,7 @@ int main(int argc, char **argv)
     }    
 
     // Create SLAM system. It initializes all system threads and gets ready to process frames.
-    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::RGBD,true);
+    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::RGBD,argv[3]);
 
     ImageGrabber igb(&SLAM);
 
@@ -123,8 +123,8 @@ void ImageGrabber::GrabRGBD(const sensor_msgs::ImageConstPtr& msgRGB,const senso
 
     geometry_msgs::PoseStamped poseStamp;
     poseStamp.pose.position.x = translation.x();
-    poseStamp.pose.position.y = translation.y();
-    poseStamp.pose.position.z = translation.z();
+    poseStamp.pose.position.y = translation.z();
+    poseStamp.pose.position.z = translation.y();
     poseStamp.pose.orientation.w = quaternion.w();
     poseStamp.pose.orientation.x = quaternion.x();
     poseStamp.pose.orientation.y = quaternion.y();
