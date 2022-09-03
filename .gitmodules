@@ -10,3 +10,6 @@
 [submodule "src/rosboard"]
 	path = src/rosboard
 	url = https://github.com/dheera/rosboard.git
+[submodule "cpu_monitor"]
+	path = cpu_monitor
+	url = https://github.com/alspitz/cpu_monitor.git
