@@ -13,3 +13,6 @@
 [submodule "cpu_monitor"]
 	path = src/cpu_monitor
 	url = https://github.com/alspitz/cpu_monitor.git
+[submodule "src/realsense-ros"]
+	path = src/realsense-ros
+	url = https://github.com/IntelRealSense/realsense-ros.git
