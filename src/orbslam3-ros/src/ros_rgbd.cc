@@ -131,8 +131,8 @@ void ImageGrabber::GrabRGBD(const sensor_msgs::ImageConstPtr& msgRGB,const senso
     poseStamp.pose.position.z = translation.y();
     poseStamp.pose.orientation.w = quaternion.w();
     poseStamp.pose.orientation.x = quaternion.x();
-    poseStamp.pose.orientation.y = quaternion.y();
-    poseStamp.pose.orientation.z = quaternion.z();
+    poseStamp.pose.orientation.y = quaternion.z();
+    poseStamp.pose.orientation.z = quaternion.y();
 
     poseStamp.header.stamp = msgD->header.stamp;
     poseStamp.header.frame_id = msgD->header.frame_id;
