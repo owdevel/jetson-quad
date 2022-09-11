@@ -16,7 +16,7 @@ def callback(data):
     marker.points.append(add_point)
     # Publish the Marker
     pub_point.publish(marker)
-    #rospy.sleep(5)
+    #rospy.sleep(0.05)
 
 
 marker = Marker()
@@ -31,8 +31,8 @@ marker.scale.z = 0.03
 
 # marker color
 marker.color.a = 1.0
-marker.color.r = 1.0
-marker.color.g = 0.0
+marker.color.r = 0.0
+marker.color.g = 1.0
 marker.color.b = 0.0
 
 # marker orientaiton
@@ -55,6 +55,6 @@ rospy.init_node('position_tracker')
 pub_point = rospy.Publisher('orbslam_marker', Marker, queue_size=100)
 print("Publisher created....")
 
-rospy.Subscriber("/orbslam_pose", PoseStamped, callback)
+rospy.Subscriber("/orbslam_pose_throttle", PoseStamped, callback)
 print("Subcriber created....")
 rospy.spin()
