@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   mavros
   rospy
   roscpp
+  tf
   sensor_msgs
   geometry_msgs
 )
@@ -107,7 +108,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES testing
-  CATKIN_DEPENDS mavros rospy sensor_msgs roscpp geometry_msgs
+  CATKIN_DEPENDS mavros rospy sensor_msgs roscpp geometry_msgs nav_msgs tf
 #  DEPENDS system_lib
 )
 

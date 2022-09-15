@@ -150,10 +150,10 @@ void ImageGrabber::GrabRGBD(const sensor_msgs::ImageConstPtr& msgRGB,const senso
     tf::StampedTransform stf;
     stf.setData(transform);
     stf.stamp_ = msgD->header.stamp;
-    // stf.frame_id_ = "map";
-    // stf.child_frame_id_ = msgD->header.frame_id;
-    stf.frame_id_ = msgD->header.frame_id;
-    stf.child_frame_id_ = "map";
+    stf.frame_id_ = "map";
+    stf.child_frame_id_ = "camera_link";
+    // stf.frame_id_ = msgD->header.frame_id;
+    // stf.child_frame_id_ = "map";
 
     br.sendTransform(stf);
 
