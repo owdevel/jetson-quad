@@ -1,0 +1,7 @@
+<launch>
+
+  <arg name="gui" default="true"/>
+
+  <node pkg="orbslam3-ros" type="orbslam3-ros_nodei" name="orbslam3_nodei" output="screen" args="$(find orbslam3-ros)/ORB_SLAM3/Vocabulary/ORBvoc.txt $(find orbslam3-ros)/config/RealSense_D435i.yaml $(arg gui)" />
+
+</launch>

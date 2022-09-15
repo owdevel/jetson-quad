@@ -15,4 +15,5 @@ plugin_whitelist:
 - command
 - imu
 - local_position
+- global_position
 - altitude

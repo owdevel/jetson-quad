@@ -11,8 +11,10 @@ def callback(data):
 
 
 def main():
-    #rospy.Subscriber('mavros/state', mavros_msgs.msg.State, callback)
+    print('Subscribing to State')
+    rospy.Subscriber('mavros/state', mavros_msgs.msg.State, callback)
 
+    print('Setting stream rate')
     # Set Stream Rate of data calls for mavros
     set_stream_rate = rospy.ServiceProxy('/mavros/set_stream_rate',
                                          mavros_msgs.srv.StreamRate)
@@ -20,6 +22,7 @@ def main():
     # Stream 0 (maybe linked to modes?), 10Hz, Enable
     set_stream_rate(0, 10, 1)
 
+    print('Subscribing to IMU')
     rospy.Subscriber('mavros/imu/data', sensor_msgs.msg.Imu, callback)
 
 

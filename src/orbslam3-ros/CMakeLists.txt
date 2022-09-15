@@ -117,7 +117,7 @@ catkin_generate_virtualenv(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
+# INCLUDE_DIRS include
 #  LIBRARIES orbslam3-ros
   CATKIN_DEPENDS roscpp
 #  DEPENDS system_lib
@@ -158,6 +158,7 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/orbslam3-ros_node.cpp)
 add_executable(${PROJECT_NAME}_node src/ros_rgbd.cc)
+add_executable(${PROJECT_NAME}_nodei src/ros_rgbdi.cc)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -171,6 +172,18 @@ add_executable(${PROJECT_NAME}_node src/ros_rgbd.cc)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME}_node
+  ${catkin_LIBRARIES}
+  ${OpenCV_LIBS} 
+  ${EIGEN3_LIBS}
+  ${Pangolin_LIBRARIES}
+  ${PCL_LIBRARIES}
+  ${OCTOMAP_LIBRARIES}
+  ${PROJECT_SOURCE_DIR}/ORB_SLAM3/Thirdparty/DBoW2/lib/libDBoW2.so
+  ${PROJECT_SOURCE_DIR}/ORB_SLAM3/Thirdparty/g2o/lib/libg2o.so
+  ${PROJECT_SOURCE_DIR}/ORB_SLAM3/lib/libORB_SLAM3.so
+  -lboost_system
+)
+target_link_libraries(${PROJECT_NAME}_nodei
   ${catkin_LIBRARIES}
   ${OpenCV_LIBS} 
   ${EIGEN3_LIBS}

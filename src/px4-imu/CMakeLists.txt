@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(testing)
+project(px4-imu)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -10,7 +10,9 @@ project(testing)
 find_package(catkin REQUIRED COMPONENTS
   mavros
   rospy
-  std_msgs
+  roscpp
+  sensor_msgs
+  geometry_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -105,7 +107,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES testing
-#  CATKIN_DEPENDS mavros rospy std_msgs
+  CATKIN_DEPENDS mavros rospy sensor_msgs roscpp geometry_msgs
 #  DEPENDS system_lib
 )
 
@@ -116,7 +118,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+#  include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -134,6 +136,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/testing_node.cpp)
+add_executable(imu_to_pose src/imu_to_pose.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -149,6 +152,9 @@ include_directories(
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
+target_link_libraries(imu_to_pose
+  ${catkin_LIBRARIES}
+)
 
 #############
 ## Install ##
