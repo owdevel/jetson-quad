@@ -11,7 +11,8 @@
                 "${workspaceFolder}/devel/include",
                 "${workspaceFolder}/src/ORB_SLAM3/build/CMakeFiles/mono_inertial_euroc.dir",
                 "${workspaceFolder}/src/ORB_SLAM3",
-                "${workspaceFolder}/src/ORB_SLAM3/include"
+                "${workspaceFolder}/src/ORB_SLAM3/include",
+                "${workspaceFolder}/src/px4-imu/Fusion/Fusion"
             ],
             "name": "ROS",
             "intelliSenseMode": "gcc-arm64",

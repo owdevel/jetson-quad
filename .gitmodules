@@ -16,3 +16,6 @@
 [submodule "src/realsense-ros"]
 	path = src/realsense-ros
 	url = https://github.com/IntelRealSense/realsense-ros.git
+[submodule "src/px4-imu/Fusion"]
+	path = src/px4-imu/Fusion
+	url = https://github.com/xioTechnologies/Fusion.git
