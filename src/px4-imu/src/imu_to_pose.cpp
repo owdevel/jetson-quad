@@ -17,9 +17,13 @@ public:
 
     void processIMU(const nav_msgs::OdometryConstPtr& msgOdom);
 
+private:
     ros::Publisher pub;
     ros::Subscriber sub;
     geometry_msgs::PoseStamped pose;
+
+    bool init = false;
+    double z_offset = 0;
 
     FusionAhrs ahrs;
 };
@@ -40,6 +44,11 @@ ImuToPose::ImuToPose(ros::NodeHandle n)
 void ImuToPose::processIMU(const nav_msgs::OdometryConstPtr& msgOdom)
 {
 
+    if (!init) {
+        z_offset = msgOdom->pose.pose.position.z;
+        init = true;
+    }
+
     ros::Time last_time = pose.header.stamp;
     ros::Time current_time = msgOdom->header.stamp;
     ros::Duration ros_dt = current_time - last_time;
@@ -48,7 +57,7 @@ void ImuToPose::processIMU(const nav_msgs::OdometryConstPtr& msgOdom)
     pose.header.stamp = msgOdom->header.stamp;
 
     pose.pose.orientation = msgOdom->pose.pose.orientation;
-    pose.pose.position.z = msgOdom->pose.pose.position.z;
+    pose.pose.position.z = msgOdom->pose.pose.position.z - z_offset;
 
     pose.pose.position.x += msgOdom->twist.twist.linear.x;
     pose.pose.position.y += msgOdom->twist.twist.linear.y;
