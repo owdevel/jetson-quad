@@ -52,7 +52,7 @@ void ImuToPose::processIMU(const nav_msgs::OdometryConstPtr& msgOdom)
     ros::Time last_time = pose.header.stamp;
     ros::Time current_time = msgOdom->header.stamp;
     ros::Duration ros_dt = current_time - last_time;
-    float dt = ros_dt.nsec / 1000000000.0;
+    float dt = ros_dt.sec + (ros_dt.nsec / 1000000000);
 
     pose.header.stamp = msgOdom->header.stamp;
 

@@ -73,13 +73,15 @@ int main(int argc, char **argv)
   ros::NodeHandle n("~");
   ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info);
   bool bEqual = false;
-  if(argc < 3 || argc > 4)
+  if(argc < 3 || argc > 5)
   {
-    cerr << endl << "Usage: rosrun ORB_SLAM3 Mono_Inertial path_to_vocabulary path_to_settings [do_equalize]" << endl;
+    cerr << endl << "Usage: rosrun ORB_SLAM3 Mono_Inertial path_to_vocabulary path_to_settings gui [do_equalize]" << endl;
     ros::shutdown();
     return 1;
   }
 
+  const string tr = "true";
+  const bool bUseViewer = tr.compare(argv[3]) == 0;
 
   if(argc==4)
   {
@@ -89,14 +91,14 @@ int main(int argc, char **argv)
   }
 
   // Create SLAM system. It initializes all system threads and gets ready to process frames.
-  ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::IMU_MONOCULAR,true);
+  ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::IMU_MONOCULAR,bUseViewer);
 
   ImuGrabber imugb;
   ImageGrabber igb(&SLAM,&imugb,bEqual); // TODO
   
   // Maximum delay, 5 seconds
-  ros::Subscriber sub_imu = n.subscribe("/imu", 1000, &ImuGrabber::GrabImu, &imugb); 
-  ros::Subscriber sub_img0 = n.subscribe("/camera/image_raw", 100, &ImageGrabber::GrabImage,&igb);
+  ros::Subscriber sub_imu = n.subscribe("/camera/imu", 1000, &ImuGrabber::GrabImu, &imugb); 
+  ros::Subscriber sub_img0 = n.subscribe("/camera/color/image_raw", 100, &ImageGrabber::GrabImage,&igb);
 
   std::thread sync_thread(&ImageGrabber::SyncWithImu,&igb);
 
@@ -175,7 +177,8 @@ void ImageGrabber::SyncWithImu()
       if(mbClahe)
         mClahe->apply(im,im);
 
-      mpSLAM->TrackMonocular(im,tIm,vImuMeas);
+      Sophus::SE3f pose = mpSLAM->TrackMonocular(im,tIm,vImuMeas);
+      ROS_INFO("Pose: X: %f, Y:%f, Z:%f", pose.translation()(0), pose.translation()(1), pose.translation()(2));
     }
 
     std::chrono::milliseconds tSleep(1);
