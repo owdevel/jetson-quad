@@ -120,7 +120,6 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
 #  include
-  Fusion/Fusion
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -155,7 +154,6 @@ add_executable(imu_to_pose src/imu_to_pose.cpp)
 #   ${catkin_LIBRARIES}
 # )
 target_link_libraries(imu_to_pose
-  ${PROJECT_SOURCE_DIR}/Fusion/build/Fusion/libFusion.a
   ${catkin_LIBRARIES}
 )
 

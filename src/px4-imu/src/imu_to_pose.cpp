@@ -6,8 +6,6 @@
 #include "geometry_msgs/PoseStamped.h"
 #include <tf/transform_broadcaster.h>
 
-#include "Fusion.h"
-
 #include <sstream>
 
 class ImuToPose
@@ -24,8 +22,6 @@ private:
 
     bool init = false;
     double z_offset = 0;
-
-    FusionAhrs ahrs;
 };
 
 ImuToPose::ImuToPose(ros::NodeHandle n)
