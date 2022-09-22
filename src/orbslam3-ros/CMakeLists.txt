@@ -16,6 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
     visualization_msgs
     message_generation
     tf
+    tf2
     cv_bridge
 )
 
@@ -159,6 +160,7 @@ include_directories(
 # add_executable(${PROJECT_NAME}_node src/orbslam3-ros_node.cpp)
 add_executable(${PROJECT_NAME}_node src/ros_rgbd.cc)
 add_executable(${PROJECT_NAME}_nodei src/ros_rgbdi.cc)
+add_executable(${PROJECT_NAME}_tf_test src/tf_test.cc)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -194,6 +196,10 @@ target_link_libraries(${PROJECT_NAME}_nodei
   ${PROJECT_SOURCE_DIR}/ORB_SLAM3/Thirdparty/g2o/lib/libg2o.so
   ${PROJECT_SOURCE_DIR}/ORB_SLAM3/lib/libORB_SLAM3.so
   -lboost_system
+)
+
+target_link_libraries(${PROJECT_NAME}_tf_test
+  ${catkin_LIBRARIES}
 )
 
 #############

@@ -38,6 +38,7 @@
     <depend>visualization_msgs</depend>
     <depend>message_generation</depend>
     <depend>tf</depend>
+    <depend>tf2</depend>
     <depend>cv_bridge</depend>
     <build_depend>catkin_virtualenv</build_depend>
   <!--   Note that this is equivalent to the following: -->

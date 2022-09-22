@@ -167,31 +167,25 @@ void ImageGrabber::GrabRGBD(const sensor_msgs::ImageConstPtr &msgRGB, const sens
 
     try
     {
-        geometry_msgs::PoseStamped cameraPose;
-        cameraPose.pose.position.x = translation.x();
-        cameraPose.pose.position.y = translation.z();
-        cameraPose.pose.position.z = translation.y();
-        cameraPose.pose.orientation.w = quaternion.w();
-        cameraPose.pose.orientation.x = quaternion.x();
-        cameraPose.pose.orientation.y = quaternion.z();
-        cameraPose.pose.orientation.z = quaternion.y();
+        tf::StampedTransform transform;
+        listener.lookupTransform("base_link", "camera_link",
+                                  ros::Time(0), transform);
 
-        cameraPose.header.stamp = msgD->header.stamp;
-        cameraPose.header.frame_id = msgD->header.frame_id;
-        // pub.publish(cameraPose);
-
-        geometry_msgs::PoseStamped basePose;        
-        listener.transformPose("base_link", cameraPose, basePose);
+        tf::Transform cameratf;
+        cameratf.setOrigin(tf::Vector3(translation.x(), translation.y(), translation.z()));
+        cameratf.setRotation(tf::Quaternion(quaternion.x(), quaternion.y(), quaternion.z(), quaternion.w()));
 
 
+        tf::Transform maptf = transform * cameratf * transform.inverse();
+        
         tf::StampedTransform stf;
-        stf.stamp_ = basePose.header.stamp;
-        stf.setOrigin(tf::Vector3(basePose.pose.position.x, basePose.pose.position.y, basePose.pose.position.z));
-        stf.setRotation(tf::Quaternion(basePose.pose.orientation.x, basePose.pose.orientation.y, basePose.pose.orientation.z, basePose.pose.orientation.w));
+        stf.stamp_ = msgD->header.stamp;
+        stf.setOrigin(maptf.getOrigin());
+        stf.setRotation(maptf.getRotation());
         stf.frame_id_ = "map";
         stf.child_frame_id_ = "base_link";
 
-        ROS_INFO("TransformPose: X: %f, Y:%f, Z:%f", basePose.pose.position.x, basePose.pose.position.y, basePose.pose.position.z);
+        ROS_INFO("MapPose: X: %f, Y:%f, Z:%f", stf.getOrigin()[0], stf.getOrigin()[1], stf.getOrigin()[2]);
 
 
         static tf::TransformBroadcaster br;
