@@ -91,6 +91,7 @@ int main(int argc, char **argv)
 
     ros::NodeHandle nh;
 
+    ROS_INFO("Adding ROS Subscribers");
     ros::Subscriber sub_imu = nh.subscribe("/camera/imu", 1000, &ImuGrabber::GrabImu, &imugb);
 
     igb.pub = nh.advertise<geometry_msgs::PoseStamped>("/orbslam_pose", 100, true);
@@ -168,12 +169,16 @@ void ImageGrabber::GrabRGBD(const sensor_msgs::ImageConstPtr &msgRGB, const sens
     try
     {
         tf::StampedTransform transform;
-        listener.lookupTransform("base_link", "camera_link",
+        listener.lookupTransform("base_link", "camera_depth_optical_frame",
                                   ros::Time(0), transform);
 
+        // Need to change the axis as ORBSLAM uses left-handed coordinate frames and ROS uses right-handed
+        // to match camera_depth_optical_frame, invert all the axis
         tf::Transform cameratf;
-        cameratf.setOrigin(tf::Vector3(translation.x(), translation.y(), translation.z()));
-        cameratf.setRotation(tf::Quaternion(quaternion.x(), quaternion.y(), quaternion.z(), quaternion.w()));
+        cameratf.setOrigin(tf::Vector3(-translation.x(), -translation.y(), -translation.z()));
+        cameratf.setRotation(tf::Quaternion(-quaternion.x(), -quaternion.y(), -quaternion.z(), quaternion.w()));
+
+        ROS_INFO("OrbPose: X: %f, Y:%f, Z:%f", translation.x(), translation.y(), translation.z());
 
 
         tf::Transform maptf = transform * cameratf * transform.inverse();

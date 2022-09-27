@@ -2,6 +2,9 @@
 
   <arg name="gui" default="true"/>
 
+  <node pkg="tf" type="static_transform_publisher" name="tf_cameraLink_orbslamFrame"
+    args="0 0 0 1.5708 0 1.5708 camera_link orbslam_frame 100" output="screen"/>
+
   <node pkg="orbslam3-ros" type="orbslam3-ros_nodei" name="orbslam3_nodei" output="screen"
   args="$(find orbslam3-ros)/ORB_SLAM3/Vocabulary/ORBvoc.txt $(find orbslam3-ros)/config/RealSense_D435i.yaml $(arg gui)" />
 
