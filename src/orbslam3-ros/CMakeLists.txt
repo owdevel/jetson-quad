@@ -20,7 +20,7 @@ find_package(catkin REQUIRED COMPONENTS
     cv_bridge
 )
 
-find_package(OpenCV 3.2 REQUIRED)
+find_package(OpenCV 4.1 REQUIRED)
 find_package(Eigen3 3.1.0 REQUIRED)
 find_package(Pangolin REQUIRED)
 find_package(PCL 1.7 REQUIRED)
