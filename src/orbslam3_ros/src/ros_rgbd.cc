@@ -35,6 +35,7 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <Eigen/Geometry>
 #include <tf/transform_broadcaster.h>
+#include <tf/transform_listener.h>
 
 using namespace std;
 
@@ -46,6 +47,7 @@ public:
     void GrabRGBD(const sensor_msgs::ImageConstPtr& msgRGB,const sensor_msgs::ImageConstPtr& msgD);
 
     ORB_SLAM3::System* mpSLAM;
+    tf::TransformListener listener;
     ros::Publisher pub;
     ros::Publisher depth;
 };
@@ -120,50 +122,47 @@ void ImageGrabber::GrabRGBD(const sensor_msgs::ImageConstPtr& msgRGB,const senso
         return;
     }
     Sophus::SE3f pose = mpSLAM->TrackRGBD(cv_ptrRGB->image,cv_ptrD->image,cv_ptrRGB->header.stamp.toSec());
-    ROS_INFO("Pose: X: %f, Y:%f, Z:%f", pose.translation()(0), pose.translation()(1), pose.translation()(2));
+
     Eigen::Vector3f translation = pose.translation();
     Eigen::Quaternionf quaternion = pose.unit_quaternion();
 
+    try
+    {
+        tf::StampedTransform transform;
+        listener.lookupTransform("base_link", "camera_depth_optical_frame",
+                                  ros::Time(0), transform);
 
-    geometry_msgs::PoseStamped poseStamp;
-    poseStamp.pose.position.x = translation.x();
-    poseStamp.pose.position.y = translation.z();
-    poseStamp.pose.position.z = translation.y();
-    poseStamp.pose.orientation.w = quaternion.w();
-    poseStamp.pose.orientation.x = quaternion.x();
-    poseStamp.pose.orientation.y = quaternion.z();
-    poseStamp.pose.orientation.z = quaternion.y();
+        // Need to change the axis as ORBSLAM uses left-handed coordinate frames and ROS uses right-handed
+        // to match camera_depth_optical_frame, invert all the axis
+        tf::Transform cameratf;
+        cameratf.setOrigin(tf::Vector3(-translation.x(), -translation.y(), -translation.z()));
+        cameratf.setRotation(tf::Quaternion(-quaternion.x(), -quaternion.y(), -quaternion.z(), quaternion.w()));
 
-    poseStamp.header.stamp = msgD->header.stamp;
-    poseStamp.header.frame_id = msgD->header.frame_id;
-
-    static tf::TransformBroadcaster br;
-    tf::Transform transform;
-    transform.setOrigin(tf::Vector3(poseStamp.pose.position.x, poseStamp.pose.position.y, poseStamp.pose.position.z));
-    tf::Quaternion q;
-    q.setW(poseStamp.pose.orientation.w);
-    q.setX(poseStamp.pose.orientation.x);
-    q.setY(poseStamp.pose.orientation.y);
-    q.setZ(poseStamp.pose.orientation.z);
-    transform.setRotation(q);
-
-    tf::StampedTransform stf;
-    stf.setData(transform);
-    stf.stamp_ = msgD->header.stamp;
-    stf.frame_id_ = "map";
-    stf.child_frame_id_ = "camera_link";
-    // stf.frame_id_ = msgD->header.frame_id;
-    // stf.child_frame_id_ = "map";
-
-    br.sendTransform(stf);
-
-    pub.publish(poseStamp);
-
-    depth.publish(msgD);
+        ROS_INFO("OrbPose: X: %f, Y:%f, Z:%f", translation.x(), translation.y(), translation.z());
 
 
+        tf::Transform maptf = transform * cameratf * transform.inverse();
+        
+        tf::StampedTransform stf;
+        stf.stamp_ = msgD->header.stamp;
+        stf.setOrigin(maptf.getOrigin());
+        stf.setRotation(maptf.getRotation());
+        stf.frame_id_ = "map";
+        stf.child_frame_id_ = "base_link";
+
+        ROS_INFO("MapPose: X: %f, Y:%f, Z:%f", stf.getOrigin()[0], stf.getOrigin()[1], stf.getOrigin()[2]);
 
 
+        static tf::TransformBroadcaster br;
+        br.sendTransform(stf);
+
+
+        //depth.publish(msgD);
+    }
+    catch (tf::TransformException ex)
+    {
+        ROS_ERROR("%s", ex.what());
+    }
 }
 
 

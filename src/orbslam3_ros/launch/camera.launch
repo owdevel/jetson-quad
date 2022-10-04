@@ -1,7 +1,12 @@
 <launch>
 
+  <!-- 30 degree camera mount -->
+  <!-- <node pkg="tf" type="static_transform_publisher" name="tf_baseLink_cameraLink"
+    args="0.185 0 -0.135 0 0.61 0 base_link camera_link 100" output="screen"/> -->
+
+  <!-- 0 degree camera mount -->
   <node pkg="tf" type="static_transform_publisher" name="tf_baseLink_cameraLink"
-    args="0.185 0 -0.135 0 0.61 0 base_link camera_link 100" output="screen"/>
+    args="0.150 0 -0.095 0 0 0 base_link camera_link 100" output="screen"/>
 
 
   <!-- Copied from rs_d435_camera_with_model.launch from realsense2 package -->
@@ -30,9 +35,9 @@
   <arg name="enable_color"        default="true"/>
 
   <arg name="fisheye_fps"         default="30"/>
-  <arg name="depth_fps"           default="15"/>
+  <arg name="depth_fps"           default="30"/>
   <arg name="infra_fps"           default="30"/>
-  <arg name="color_fps"           default="15"/>
+  <arg name="color_fps"           default="30"/>
 
   <arg name="gyro_fps"            default="400"/>
   <arg name="accel_fps"           default="250"/>
@@ -46,7 +51,7 @@
   <arg name="enable_sync"               default="true"/>
   <arg name="align_depth"               default="false"/>
 
-  <arg name="filters"                   default="pointcloud"/>
+  <arg name="filters"                   default=""/>
   <arg name="clip_distance"             default="-2"/>
   <arg name="linear_accel_cov"          default="0.01"/>
   <arg name="initial_reset"             default="true"/>

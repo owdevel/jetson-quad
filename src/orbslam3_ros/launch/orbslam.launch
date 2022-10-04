@@ -2,8 +2,8 @@
 
   <arg name="gui" default="true"/>
 
-  <node pkg="orbslam3-ros" type="orbslam3-ros_node" name="orbslam3_node" output="screen"
-    args="$(find orbslam3-ros)/ORB_SLAM3/Vocabulary/ORBvoc.txt $(find orbslam3-ros)/config/RealSense_D435i.yaml $(arg gui)" />
+  <node pkg="orbslam3_ros" type="orbslam3_ros_node" name="orbslam3_node" output="screen"
+    args="$(find orbslam3_ros)/ORB_SLAM3/Vocabulary/ORBvoc.txt $(find orbslam3_ros)/config/RealSense_D435i.yaml $(arg gui)" />
 
   <node pkg="hector_trajectory_server" type="hector_trajectory_server" name="orbslam_hector_trajectory_server" output="screen">
     <param name="target_frame_name" type="string" value="/map" />

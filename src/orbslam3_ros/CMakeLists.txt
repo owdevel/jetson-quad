@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(orbslam3-ros)
+project(orbslam3_ros)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
     roscpp
     rospy
     catkin_virtualenv
+    std_msgs
     sensor_msgs
     geometry_msgs
     visualization_msgs
@@ -67,6 +68,10 @@ catkin_generate_virtualenv(
 #   Message1.msg
 #   Message2.msg
 # )
+add_message_files(
+   FILES
+   SLAMTime.msg
+)
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -87,6 +92,10 @@ catkin_generate_virtualenv(
 #   DEPENDENCIES
 #   std_msgs  # Or other packages containing msgs
 # )
+generate_messages(
+  DEPENDENCIES
+  std_msgs  # Or other packages containing msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -120,7 +129,7 @@ catkin_generate_virtualenv(
 catkin_package(
 # INCLUDE_DIRS include
 #  LIBRARIES orbslam3-ros
-  CATKIN_DEPENDS roscpp
+  CATKIN_DEPENDS roscpp message_runtime
 #  DEPENDS system_lib
 )
 

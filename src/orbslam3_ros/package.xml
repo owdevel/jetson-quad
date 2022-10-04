@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>orbslam3-ros</name>
+  <name>orbslam3_ros</name>
   <version>0.0.0</version>
-  <description>The orbslam3-ros package</description>
+  <description>The orbslam3_ros package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
@@ -36,12 +36,14 @@
     <depend>sensor_msgs</depend>
     <depend>geometry_msgs</depend>
     <depend>visualization_msgs</depend>
-    <depend>message_generation</depend>
     <depend>tf</depend>
     <depend>tf2</depend>
     <depend>cv_bridge</depend>
     <exec_depend>hector_trajectory_server</exec_depend>
     <build_depend>catkin_virtualenv</build_depend>
+    <build_depend>message_generation</build_depend>
+    <exec_depend>message_runtime</exec_depend>
+
   <!--   Note that this is equivalent to the following: -->
     <!-- <build_depend>roscpp</build_depend> -->
     <!-- <exec_depend>roscpp</exec_depend> -->

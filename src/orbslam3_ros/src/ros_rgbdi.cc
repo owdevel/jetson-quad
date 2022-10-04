@@ -35,6 +35,7 @@
 
 #include <geometry_msgs/PoseStamped.h>
 #include <sensor_msgs/Imu.h>
+#include "orbslam3_ros/SLAMTime.h"
 #include <Eigen/Geometry>
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_listener.h>
@@ -62,8 +63,7 @@ public:
     ImuGrabber *mpImuGb;
     tf::TransformListener listener;
 
-    ros::Publisher pub;
-    ros::Publisher depth;
+    ros::Publisher slamTimePub;
 };
 
 int main(int argc, char **argv)
@@ -94,8 +94,7 @@ int main(int argc, char **argv)
     ROS_INFO("Adding ROS Subscribers");
     ros::Subscriber sub_imu = nh.subscribe("/camera/imu", 1000, &ImuGrabber::GrabImu, &imugb);
 
-    igb.pub = nh.advertise<geometry_msgs::PoseStamped>("/orbslam_pose", 100, true);
-    igb.depth = nh.advertise<sensor_msgs::Image>("/orbslam_depth", 100, true);
+    igb.slamTimePub = nh.advertise<orbslam3_ros::SLAMTime>("/orbslam_time", 100, true);
 
     message_filters::Subscriber<sensor_msgs::Image> rgb_sub(nh, "/camera/color/image_raw", 100);
     message_filters::Subscriber<sensor_msgs::Image> depth_sub(nh, "/camera/depth/image_rect_raw", 100);
@@ -118,6 +117,9 @@ int main(int argc, char **argv)
 
 void ImageGrabber::GrabRGBD(const sensor_msgs::ImageConstPtr &msgRGB, const sensor_msgs::ImageConstPtr &msgD)
 {
+
+    ros::Time start_time = ros::Time::now();
+
     // Copy the ros image message to cv::Mat.
     cv_bridge::CvImageConstPtr cv_ptrRGB;
     try
@@ -197,12 +199,22 @@ void ImageGrabber::GrabRGBD(const sensor_msgs::ImageConstPtr &msgRGB, const sens
         br.sendTransform(stf);
 
 
-        depth.publish(msgD);
+        //depth.publish(msgD);
     }
     catch (tf::TransformException ex)
     {
         ROS_ERROR("%s", ex.what());
     }
+
+    ros::Time stop_time = ros::Time::now();
+    ros::Duration diff = stop_time - start_time;
+
+    orbslam3_ros::SLAMTime slamTime;
+    slamTime.header = msgD->header;
+    slamTime.start_time = start_time;
+    slamTime.diff = diff;
+
+    slamTimePub.publish(slamTime);
 }
 
 void ImuGrabber::GrabImu(const sensor_msgs::ImuConstPtr &imu_msg)
