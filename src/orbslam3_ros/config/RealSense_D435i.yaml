@@ -24,7 +24,7 @@ Camera.width: 640
 Camera.height: 480
 
 # Camera frames per second 
-Camera.fps: 30
+Camera.fps: 15
 
 # Color order of the images (0: BGR, 1: RGB. It is ignored if images are grayscale)
 Camera.RGB: 1
@@ -60,8 +60,8 @@ IMU.Frequency: 400.0
 # ORB Parameters
 #--------------------------------------------------------------------------------------------
 # ORB Extractor: Number of features per image
-ORBextractor.nFeatures: 1250
-# ORBextractor.nFeatures: 800
+# ORBextractor.nFeatures: 1250
+ORBextractor.nFeatures: 700
 
 # ORB Extractor: Scale factor between levels in the scale pyramid 	
 ORBextractor.scaleFactor: 1.2

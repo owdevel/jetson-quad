@@ -97,9 +97,10 @@ int main(int argc, char **argv)
     igb.slamTimePub = nh.advertise<orbslam3_ros::SLAMTime>("/orbslam_time", 100, true);
 
     message_filters::Subscriber<sensor_msgs::Image> rgb_sub(nh, "/camera/color/image_raw", 100);
-    message_filters::Subscriber<sensor_msgs::Image> depth_sub(nh, "/camera/depth/image_rect_raw", 100);
-    typedef message_filters::sync_policies::ApproximateTime<sensor_msgs::Image, sensor_msgs::Image> sync_pol;
-    message_filters::Synchronizer<sync_pol> sync(sync_pol(10), rgb_sub, depth_sub);
+    message_filters::Subscriber<sensor_msgs::Image> depth_sub(nh, "/camera/aligned_depth_to_color/image_raw", 100);
+    // typedef message_filters::sync_policies::ApproximateTime<sensor_msgs::Image, sensor_msgs::Image> sync_pol;
+    // message_filters::Synchronizer<sync_pol> sync(sync_pol(10), rgb_sub, depth_sub);
+    message_filters::TimeSynchronizer<sensor_msgs::Image, sensor_msgs::Image> sync(rgb_sub, depth_sub, 100);
     sync.registerCallback(boost::bind(&ImageGrabber::GrabRGBD, &igb, _1, _2));
 
     ros::spin();
@@ -108,7 +109,7 @@ int main(int argc, char **argv)
     SLAM.Shutdown();
 
     // Save camera trajectory
-    SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory.txt");
+    // SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory.txt");
 
     ros::shutdown();
 

@@ -33,6 +33,7 @@
 #include "System.h"
 
 #include <geometry_msgs/PoseStamped.h>
+#include "orbslam3_ros/SLAMTime.h"
 #include <Eigen/Geometry>
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_listener.h>
@@ -48,8 +49,8 @@ public:
 
     ORB_SLAM3::System* mpSLAM;
     tf::TransformListener listener;
-    ros::Publisher pub;
-    ros::Publisher depth;
+
+    ros::Publisher slamTimePub;
 };
 
 int main(int argc, char **argv)
@@ -75,14 +76,13 @@ int main(int argc, char **argv)
 
     ros::NodeHandle nh;
 
-    igb.pub = nh.advertise<geometry_msgs::PoseStamped>("/orbslam_pose", 100, true);
-    igb.depth = nh.advertise<sensor_msgs::Image>("/orbslam_depth", 100, true);
+    igb.slamTimePub = nh.advertise<orbslam3_ros::SLAMTime>("/orbslam_time", 100, true);
 
     message_filters::Subscriber<sensor_msgs::Image> rgb_sub(nh, "/camera/color/image_raw", 100);
-    message_filters::Subscriber<sensor_msgs::Image> depth_sub(nh, "/camera/depth/image_rect_raw", 100);
+    message_filters::Subscriber<sensor_msgs::Image> depth_sub(nh, "/camera/aligned_depth_to_color/image_raw", 100);
     typedef message_filters::sync_policies::ApproximateTime<sensor_msgs::Image, sensor_msgs::Image> sync_pol;
-    message_filters::Synchronizer<sync_pol> sync(sync_pol(10), rgb_sub,depth_sub);
-    sync.registerCallback(boost::bind(&ImageGrabber::GrabRGBD,&igb,_1,_2));
+    message_filters::TimeSynchronizer<sensor_msgs::Image, sensor_msgs::Image> sync(rgb_sub, depth_sub, 100);
+    sync.registerCallback(boost::bind(&ImageGrabber::GrabRGBD, &igb, _1, _2));
 
     ros::spin();
 
@@ -90,7 +90,7 @@ int main(int argc, char **argv)
     SLAM.Shutdown();
 
     // Save camera trajectory
-    SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory.txt");
+    // SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory.txt");
 
     ros::shutdown();
 
@@ -99,6 +99,9 @@ int main(int argc, char **argv)
 
 void ImageGrabber::GrabRGBD(const sensor_msgs::ImageConstPtr& msgRGB,const sensor_msgs::ImageConstPtr& msgD)
 {
+
+    ros::Time start_time = ros::Time::now();
+
     // Copy the ros image message to cv::Mat.
     cv_bridge::CvImageConstPtr cv_ptrRGB;
     try
@@ -163,6 +166,16 @@ void ImageGrabber::GrabRGBD(const sensor_msgs::ImageConstPtr& msgRGB,const senso
     {
         ROS_ERROR("%s", ex.what());
     }
+
+    ros::Time stop_time = ros::Time::now();
+    ros::Duration diff = stop_time - start_time;
+
+    orbslam3_ros::SLAMTime slamTime;
+    slamTime.header = msgD->header;
+    slamTime.start_time = start_time;
+    slamTime.diff = diff;
+
+    slamTimePub.publish(slamTime);
 }
 
 
