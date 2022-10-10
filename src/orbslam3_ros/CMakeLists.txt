@@ -167,6 +167,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/orbslam3-ros_node.cpp)
+add_executable(${PROJECT_NAME}_node_mono src/ros_mono.cc)
 add_executable(${PROJECT_NAME}_node src/ros_rgbd.cc)
 add_executable(${PROJECT_NAME}_nodei src/ros_rgbdi.cc)
 add_executable(${PROJECT_NAME}_tf_test src/tf_test.cc)
@@ -182,6 +183,18 @@ add_executable(${PROJECT_NAME}_tf_test src/tf_test.cc)
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
+target_link_libraries(${PROJECT_NAME}_node_mono
+  ${catkin_LIBRARIES}
+  ${OpenCV_LIBS} 
+  ${EIGEN3_LIBS}
+  ${Pangolin_LIBRARIES}
+  ${PCL_LIBRARIES}
+  ${OCTOMAP_LIBRARIES}
+  ${PROJECT_SOURCE_DIR}/ORB_SLAM3/Thirdparty/DBoW2/lib/libDBoW2.so
+  ${PROJECT_SOURCE_DIR}/ORB_SLAM3/Thirdparty/g2o/lib/libg2o.so
+  ${PROJECT_SOURCE_DIR}/ORB_SLAM3/lib/libORB_SLAM3.so
+  -lboost_system
+)
 target_link_libraries(${PROJECT_NAME}_node
   ${catkin_LIBRARIES}
   ${OpenCV_LIBS} 

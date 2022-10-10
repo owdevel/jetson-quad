@@ -1,0 +1,16 @@
+<launch>
+
+  <arg name="gui" default="true"/>
+
+  <node pkg="orbslam3_ros" type="orbslam3_ros_node" name="orbslam3_node_mono" output="screen"
+    args="$(find orbslam3_ros)/ORB_SLAM3/Vocabulary/ORBvoc.txt $(find orbslam3_ros)/config/RealSense_D435i.yaml $(arg gui)" />
+
+  <node pkg="hector_trajectory_server" type="hector_trajectory_server" name="orbslam_hector_trajectory_server" output="screen">
+    <param name="target_frame_name" type="string" value="/map" />
+    <param name="source_frame_name" type="string" value="/base_link" />
+    <param name="trajectory_update_rate" type="double" value="20" />
+    <param name="trajectory_publish_rate" type="double" value="2" />
+    <remap from="trajectory" to="orbslam_trajectory" />
+  </node>
+
+</launch>
