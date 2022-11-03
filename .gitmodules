@@ -19,3 +19,6 @@
 [submodule "vision_opencv"]
 	path = src/vision_opencv
 	url = https://github.com/fizyr-forks/vision_opencv.git
+[submodule "src/allan_variance_ros"]
+	path = src/allan_variance_ros
+	url = https://github.com/ori-drs/allan_variance_ros.git

@@ -20,7 +20,7 @@ def main():
                                          mavros_msgs.srv.StreamRate)
 
     # Stream 0 (maybe linked to modes?), 10Hz, Enable
-    set_stream_rate(0, 10, 1)
+    set_stream_rate(0, 200, 1)
 
     print('Subscribing to IMU')
     rospy.Subscriber('mavros/imu/data', sensor_msgs.msg.Imu, callback)
