@@ -22,3 +22,6 @@
 [submodule "src/allan_variance_ros"]
 	path = src/allan_variance_ros
 	url = https://github.com/ori-drs/allan_variance_ros.git
+[submodule "src/kalibr"]
+	path = src/kalibr
+	url = https://github.com/ethz-asl/kalibr.git
