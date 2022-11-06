@@ -1,14 +1,7 @@
-# Jetson Quad
+# Jetson Quad Software Repository
 
-Main repository for orblam3 based jetson tracking
+This is a repository of code utilised to run and test ORBSLAM3 on a Jetson TX2 4GB for the purposes of UAV autopilot.
+It was created as part of an Undergraduate Engineering Thesis in Mechatronics.
 
-
-## Installation Instructions
-1. Ensure there is a large amount of swap space, it is suggested to mount a swapfile of a least 10GB+ (tested with 20GB swapfile)
-2. Clone this repo onto jetson
-3. Enable and update submodules with `git submodule init` and `git submodule update`
-4. Ensure dependencies are installed with `rosdep install --from-paths src --ignore-src -r`
-5. Navigate to `src/orbslam3-ros/ORB_SLAM3`
-6. Compile ORB SLAM3 with `./build.sh`, note that this process can take a couple hours on the Jetson TX2.
-7. Navigate back to the root and run `catkin build`
-
+## Usage
+Clone this repository onto the device and run `catkin build`, presuming all dependencies are accounted for.
